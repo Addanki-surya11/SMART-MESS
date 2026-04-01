@@ -1,0 +1,38 @@
+[
+  {
+    "name": "jaya",
+    "reg": "RA23110260105205",
+    "email": "jg1813@srmist.edu.in",
+    "meal": "breakfast",
+    "slot": "-",
+    "time": "19:46:45",
+    "date": "2026-03-18"
+  },
+  {
+    "name": "ADDANKI",
+    "reg": "RA2311026010526",
+    "email": "suryaaddanki877@gmail.com",
+    "meal": "breakfast",
+    "slot": "-",
+    "time": "19:47:56",
+    "date": "2026-03-18"
+  },
+  {
+    "name": "VAMSI",
+    "reg": "RA2311026010549",
+    "email": "gm1992@srmist",
+    "meal": "breakfast",
+    "slot": "7:20 - 8:10",
+    "time": "19:59:15",
+    "date": "2026-03-18"
+  },
+  {
+    "name": "ADDANKI",
+    "reg": "RA2311026010526",
+    "email": "suryaaddanki877@gmail.com",
+    "meal": "dinner",
+    "slot": "7:30 - 8:20",
+    "time": "20:03:13",
+    "date": "2026-03-18"
+  }
+]

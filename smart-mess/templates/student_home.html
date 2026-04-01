@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Mess – Today</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--card:rgba(255,255,255,.05);--border:rgba(255,255,255,.1);--orange:#ff8c00;--red:#ff4500;--green:#00e676;--blue:#29b6f6;--text:#f0f0f0;--muted:rgba(255,255,255,.45)}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh}
+nav{display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;border-bottom:1px solid var(--border);background:rgba(10,10,15,.9);backdrop-filter:blur(20px);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:.5rem}
+.logo{font-family:'Syne',sans-serif;font-size:1.4rem;color:var(--orange)}.logo span{color:#fff}
+.nav-links{display:flex;gap:.4rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.78rem;font-weight:500;padding:.35rem .7rem;border-radius:8px;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--orange);background:rgba(255,140,0,.1)}
+.user-badge{background:rgba(255,140,0,.15);border:1px solid rgba(255,140,0,.3);color:var(--orange);padding:.3rem .7rem;border-radius:8px;font-size:.74rem;font-weight:600}
+.hero{padding:1.8rem 2rem .8rem;max-width:1100px;margin:0 auto}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,3vw,2.3rem);line-height:1.1}
+.hero h1 span{color:var(--orange)}
+.date-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--border);padding:.3rem .75rem;border-radius:20px;font-size:.74rem;color:var(--muted);margin-top:.5rem}
+.grid{max-width:1100px;margin:.8rem auto;padding:0 2rem 3rem;display:grid;gap:1.3rem}
+.meal-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;animation:fadeIn .45s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}}
+.meal-header{padding:.9rem 1.4rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.4rem}
+.meal-title{display:flex;align-items:center;gap:.6rem}
+.meal-icon{font-size:1.3rem}
+.meal-name{font-family:'Syne',sans-serif;font-size:1rem}
+.meal-time{color:var(--muted);font-size:.7rem}
+.pred-badge{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);color:var(--green);padding:.2rem .6rem;border-radius:20px;font-size:.72rem;font-weight:600}
+.meal-body{padding:1.1rem 1.4rem;display:grid;grid-template-columns:1fr 1fr;gap:1.3rem}
+@media(max-width:600px){.meal-body{grid-template-columns:1fr}}
+.slbl{color:var(--muted);font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.45rem}
+.menu-section{margin-bottom:.65rem}
+.msec-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;display:flex;align-items:center;gap:.3rem}
+.msec-title.veg{color:var(--green)}.msec-title.nonveg{color:#ff6b6b}
+.menu-tags{display:flex;flex-wrap:wrap;gap:.28rem}
+.mtag{padding:.16rem .5rem;border-radius:20px;font-size:.72rem}
+.mtag.veg{border:1px solid rgba(0,230,118,.4);color:var(--green);background:rgba(0,230,118,.06)}
+.mtag.nonveg{border:1px solid rgba(255,60,60,.4);color:#ff6b6b;background:rgba(255,60,60,.06)}
+.no-nv{font-size:.7rem;color:var(--muted);font-style:italic}
+.vote-counts{display:flex;gap:.5rem;margin-bottom:.6rem}
+.count-item{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:.38rem .7rem}
+.count-num{font-size:1.15rem;font-weight:700}.count-num.yes{color:var(--green)}.count-num.no{color:#ff6b6b}
+.count-lbl{font-size:.6rem;color:var(--muted)}
+.vote-row{display:flex;gap:.5rem;margin-bottom:.45rem}
+.vote-btn{flex:1;padding:.5rem;border-radius:9px;border:1px solid var(--border);font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s}
+.vote-btn.yes{background:rgba(0,230,118,.1);border-color:rgba(0,230,118,.4);color:var(--green)}
+.vote-btn.yes:hover{background:rgba(0,230,118,.2);transform:translateY(-2px)}
+.vote-btn.no{background:rgba(255,60,60,.08);border-color:rgba(255,60,60,.3);color:#ff6b6b}
+.vote-btn.no:hover{background:rgba(255,60,60,.15);transform:translateY(-2px)}
+.voted-yes{background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.3);color:var(--green);padding:.38rem .8rem;border-radius:9px;font-size:.76rem;font-weight:600;text-align:center;margin-bottom:.38rem}
+.voted-no{background:rgba(255,60,60,.07);border:1px solid rgba(255,60,60,.3);color:#ff6b6b;padding:.38rem .8rem;border-radius:9px;font-size:.76rem;font-weight:600;text-align:center;margin-bottom:.38rem}
+.edit-link{display:block;text-align:center;font-size:.7rem;color:var(--muted);cursor:pointer;margin-bottom:.55rem;text-decoration:underline}
+.edit-link:hover{color:var(--orange)}
+.req-box{background:rgba(255,140,0,.06);border:1px solid rgba(255,140,0,.2);border-radius:9px;padding:.5rem .8rem;font-size:.72rem;margin-top:.6rem}
+select{width:100%;padding:.55rem .9rem;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:.8rem;outline:none;margin-bottom:.55rem;appearance:none;cursor:pointer}
+select:focus{border-color:var(--orange)}
+select option{background:#1a1a2e}
+.btn{width:100%;padding:.58rem;border:none;border-radius:9px;color:#fff;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;transition:all .15s;margin-bottom:.4rem}
+.btn-orange{background:linear-gradient(135deg,var(--orange),var(--red))}
+.btn-orange:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(255,140,0,.35)}
+.booked-badge{background:rgba(41,182,246,.1);border:1px solid rgba(41,182,246,.3);color:var(--blue);padding:.38rem .8rem;border-radius:9px;font-size:.76rem;font-weight:600;text-align:center;margin-bottom:.38rem}
+.att-done{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);color:var(--green);padding:.38rem .8rem;border-radius:9px;font-size:.76rem;font-weight:600;text-align:center;margin-bottom:.55rem}
+.att-pending{background:rgba(255,193,7,.07);border:1px solid rgba(255,193,7,.3);color:#ffc107;padding:.38rem .8rem;border-radius:9px;font-size:.7rem;text-align:center;margin-bottom:.5rem;line-height:1.5}
+.slot-stat{display:flex;justify-content:space-between;align-items:center;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.7rem}
+.slot-stat:last-child{border:none}
+.slot-bar-wrap{width:55px;height:4px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.slot-bar{height:100%;background:var(--orange);border-radius:3px}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:#13131b;border:1px solid var(--border);border-radius:20px;padding:1.8rem;max-width:340px;width:92vw;text-align:center;position:relative}
+.modal-close{position:absolute;top:.8rem;right:.85rem;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+.modal-title{font-family:'Syne',sans-serif;font-size:1rem;margin-bottom:.3rem}
+.modal-sub{color:var(--muted);font-size:.7rem;margin-bottom:1rem}
+#qr-wrap{display:flex;justify-content:center;margin-bottom:.75rem}
+#qr-wrap canvas,#qr-wrap img{border-radius:8px;border:5px solid #fff}
+.qr-info{color:var(--muted);font-size:.7rem;line-height:1.7;margin-bottom:.65rem}
+.qr-url-box{background:rgba(0,230,118,.06);border:1px solid rgba(0,230,118,.2);border-radius:7px;padding:.45rem .65rem;font-size:.6rem;color:rgba(0,230,118,.8);word-break:break-all;margin-bottom:.75rem;text-align:left}
+.qr-warn{background:rgba(255,193,7,.07);border:1px solid rgba(255,193,7,.3);border-radius:8px;padding:.45rem;font-size:.7rem;color:#ffc107;margin-bottom:.8rem}
+.fb-section{max-width:1100px;margin:0 auto 3rem;padding:0 2rem}
+.sec-title{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:.85rem}
+.fb-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:1.3rem}
+.fb-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:600px){.fb-grid{grid-template-columns:1fr}}
+.star-wrap{display:flex;gap:.35rem;margin:.3rem 0 .8rem}
+.star-wrap input{display:none}
+.star-wrap label{font-size:1.25rem;cursor:pointer;filter:grayscale(1);transition:filter .1s}
+.star-wrap input:checked~label,.star-wrap label:hover,.star-wrap label:hover~label{filter:none}
+textarea{width:100%;padding:.7rem .95rem;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:.8rem;resize:vertical;min-height:75px;outline:none}
+textarea:focus{border-color:var(--orange)}
+.toast{position:fixed;bottom:1.8rem;right:1.8rem;padding:.62rem 1.05rem;border-radius:11px;font-weight:600;font-size:.8rem;opacity:0;pointer-events:none;transform:translateY(16px);transition:all .3s;z-index:999;max-width:290px}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok{background:rgba(0,230,118,.12);border:1px solid rgba(0,230,118,.4);color:var(--green)}
+.toast.err{background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.3);color:#ff6b6b}
+.toast.warn{background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.4);color:var(--orange)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">Smart<span>Mess</span></div>
+  <div class="nav-links">
+    <a href="/student" class="active">🍽 Today</a>
+    <a href="/my_attendance">📋 My Attendance</a>
+    <a href="/logout">🚪 Logout</a>
+  </div>
+  <div class="user-badge">👤 {{ name }}</div>
+</nav>
+<div class="hero">
+  <h1>Today's <span>Mess</span> Portal</h1>
+  <div class="date-badge">📅 {{ now.strftime('%A, %d %B %Y') }} &nbsp;|&nbsp; 🏠 {{ hostel }}</div>
+</div>
+<div class="grid">
+{% for meal_key, icon, meal_label, timing, pred in [
+  ('breakfast','🌅','Breakfast','6:30 AM – 9:00 AM', predict_breakfast),
+  ('lunch','☀️','Lunch','11:00 AM – 1:30 PM', predict_lunch),
+  ('dinner','🌙','Dinner','7:30 PM – 10:00 PM', predict_dinner)
+] %}
+{% set ms = meal_status[meal_key] %}
+<div class="meal-card" style="animation-delay:{{ loop.index0 }}00ms">
+  <div class="meal-header">
+    <div class="meal-title">
+      <span class="meal-icon">{{ icon }}</span>
+      <div><div class="meal-name">{{ meal_label }}</div><div class="meal-time">{{ timing }}</div></div>
+    </div>
+    <div class="pred-badge">🍽 {{ pred }} plates predicted</div>
+  </div>
+  <div class="meal-body">
+    <div>
+      <div class="slbl">📋 Today's Menu</div>
+      <div class="menu-section">
+        <div class="msec-title veg">🥦 Veg</div>
+        <div class="menu-tags">{% for item in menu[meal_key]['veg'] %}<span class="mtag veg">{{ item }}</span>{% endfor %}</div>
+      </div>
+      <div class="menu-section">
+        <div class="msec-title nonveg">🍗 Non-Veg</div>
+        {% if menu[meal_key]['nonveg'] %}
+          <div class="menu-tags">{% for item in menu[meal_key]['nonveg'] %}<span class="mtag nonveg">{{ item }}</span>{% endfor %}</div>
+        {% else %}<div class="no-nv">No non-veg today</div>{% endif %}
+      </div>
+      <div class="slbl">📊 Vote Count</div>
+      <div class="vote-counts">
+        <div class="count-item"><div class="count-num yes" id="yes-{{ meal_key }}">{{ votes[meal_key]['yes'] }}</div><div class="count-lbl">YES</div></div>
+        <div class="count-item"><div class="count-num no" id="no-{{ meal_key }}">{{ votes[meal_key]['no'] }}</div><div class="count-lbl">NO</div></div>
+      </div>
+      <div class="slbl">🗳 Your Vote</div>
+      {% if ms.my_vote == 'yes' %}
+        <div class="voted-yes">✅ Voted YES for {{ meal_label }}</div>
+        <span class="edit-link" onclick="toggleEl('ve-{{ meal_key }}')">✏️ Change vote</span>
+      {% elif ms.my_vote == 'no' %}
+        <div class="voted-no">❌ Voted NO for {{ meal_label }}</div>
+        <span class="edit-link" onclick="toggleEl('ve-{{ meal_key }}')">✏️ Change vote</span>
+      {% else %}
+        <div class="vote-row">
+          <button class="vote-btn yes" onclick="castVote('{{ meal_key }}','yes')">✅ YES</button>
+          <button class="vote-btn no"  onclick="castVote('{{ meal_key }}','no')">❌ NO</button>
+        </div>
+      {% endif %}
+      <div id="ve-{{ meal_key }}" style="display:none">
+        <div class="vote-row">
+          <button class="vote-btn yes" onclick="castVote('{{ meal_key }}','yes')">✅ YES</button>
+          <button class="vote-btn no"  onclick="castVote('{{ meal_key }}','no')">❌ NO</button>
+        </div>
+      </div>
+      <div class="req-box">
+        <div style="color:var(--orange);font-weight:700;font-size:.7rem">🧮 Food Required</div>
+        <div style="color:var(--muted);font-size:.65rem;margin:.1rem 0">YES + (NO × 0.7)</div>
+        <div style="color:var(--text);font-weight:700;font-size:.92rem" id="pred-{{ meal_key }}">{{ pred }} plates</div>
+      </div>
+    </div>
+    <div>
+      {% if ms.attended %}
+        <div class="att-done">✅ Present! Attendance marked</div>
+      {% elif ms.booked %}
+        <div class="slbl">✅ Slot Confirmed</div>
+        <div class="booked-badge">📅 {{ ms.slot }}</div>
+        <span class="edit-link" onclick="toggleEl('se-{{ meal_key }}')">✏️ Change slot</span>
+        <div id="se-{{ meal_key }}" style="display:none;margin-bottom:.45rem">
+          <select id="slot-{{ meal_key }}">
+            {% for st in slot_options[meal_key] %}
+              <option value="{{ st }}" {% if st == ms.slot %}selected{% endif %}>{{ st }} ({{ slots[meal_key][st] }} booked)</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-orange" onclick="bookSlot('{{ meal_key }}')">Update Slot</button>
+        </div>
+        <div class="att-pending">⏳ Show QR at mess entrance<br><span style="font-size:.66rem">Admin scans → auto present</span></div>
+        <button class="btn btn-orange" onclick="showQR('{{ meal_key }}','{{ reg }}','{{ ms.slot }}','{{ today_date }}')">📲 Show My QR</button>
+      {% elif ms.my_vote == 'yes' %}
+        <div class="slbl">🕐 Book Slot</div>
+        <select id="slot-{{ meal_key }}">
+          {% for st in slot_options[meal_key] %}<option value="{{ st }}">{{ st }} ({{ slots[meal_key][st] }} booked)</option>{% endfor %}
+        </select>
+        <button class="btn btn-orange" onclick="bookSlot('{{ meal_key }}')">📅 Confirm Slot</button>
+      {% elif ms.my_vote == 'no' %}
+        <div style="color:var(--muted);font-size:.76rem;text-align:center;padding:1.8rem 0">❌ Opted out</div>
+      {% else %}
+        <div style="color:var(--muted);font-size:.76rem;text-align:center;padding:1.8rem 0">⬅ Vote first</div>
+      {% endif %}
+      <div class="slbl" style="margin-top:.5rem">📈 Slot Popularity</div>
+      {% set max_c = slots[meal_key].values()|max if slots[meal_key].values()|max > 0 else 1 %}
+      {% for st, cnt in slots[meal_key].items() %}
+      <div class="slot-stat">
+        <span style="color:var(--muted)">{{ st }}</span>
+        <div style="display:flex;align-items:center;gap:.4rem">
+          <div class="slot-bar-wrap"><div class="slot-bar" style="width:{{ (cnt/max_c*100)|int }}%"></div></div>
+          <span style="font-size:.7rem;font-weight:700;color:var(--orange);min-width:14px">{{ cnt }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+<div class="fb-section">
+  <div class="sec-title">💬 Feedback</div>
+  <div class="fb-card">
+    <form method="POST" action="/submit_feedback">
+      <div class="fb-grid">
+        <div>
+          <div class="slbl">Meal</div>
+          <select name="meal"><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option></select>
+          <div class="slbl">Rating</div>
+          <div class="star-wrap">
+            {% for i in [5,4,3,2,1] %}
+            <input type="radio" name="rating" id="s{{ i }}" value="{{ i }}" {% if i==4 %}checked{% endif %}>
+            <label for="s{{ i }}">⭐</label>
+            {% endfor %}
+          </div>
+        </div>
+        <div>
+          <div class="slbl">Comment</div>
+          <textarea name="comment" placeholder="Share your thoughts..."></textarea>
+          <button type="submit" class="btn btn-orange" style="margin-top:.55rem">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-overlay" id="qr-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('qr-modal').classList.remove('open')">✕</button>
+    <div class="modal-title">📲 Show at Mess Entrance</div>
+    <div class="modal-sub">Admin scans with Google Lens → auto marked ✅</div>
+    <div id="qr-wrap"></div>
+    <div class="qr-info" id="qr-info"></div>
+    <div class="qr-url-box" id="qr-url-box"></div>
+    <div class="qr-warn">⚠️ Valid today only. Do not share.</div>
+    <button class="btn btn-orange" onclick="document.getElementById('qr-modal').classList.remove('open')">Done</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const BASE  = window.location.origin;
+const TODAY = '{{ today_date }}';
+const REG   = '{{ reg }}';
+function showToast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3500);}
+function toggleEl(id){const el=document.getElementById(id);el.style.display=el.style.display==='none'?'block':'none';}
+async function castVote(meal,choice){
+  const res=await fetch('/vote',{method:'POST',body:new URLSearchParams({meal,vote:choice})});
+  const data=await res.json();
+  if(data.status==='ok'){
+    document.getElementById('yes-'+meal).textContent=data.yes;
+    document.getElementById('no-'+meal).textContent=data.no;
+    document.getElementById('pred-'+meal).textContent=data.predicted+' plates';
+    showToast(choice==='yes'?'✅ Voted YES! Book your slot.':'❌ Voted NO!','ok');
+    setTimeout(()=>location.reload(),700);
+  }else{showToast('⚠️ '+data.message,'warn');}
+}
+async function bookSlot(meal){
+  const slot=document.getElementById('slot-'+meal)?.value;
+  if(!slot)return;
+  const res=await fetch('/book_slot',{method:'POST',body:new URLSearchParams({meal,slot})});
+  const data=await res.json();
+  if(data.status==='ok'){showToast('✅ Slot confirmed! QR ready','ok');setTimeout(()=>showQR(meal,REG,slot,TODAY),500);}
+  else{showToast('❌ '+data.message,'err');}
+}
+function showQR(meal,reg,slot,qrDate){
+  const wrap=document.getElementById('qr-wrap');wrap.innerHTML='';
+  const qrURL=BASE+'/attend/'+reg+'/'+meal+'/'+qrDate;
+  new QRCode(wrap,{text:qrURL,width:220,height:220,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});
+  document.getElementById('qr-info').innerHTML='👤 <b>'+reg+'</b><br>🍽 '+meal.charAt(0).toUpperCase()+meal.slice(1)+' | 🕐 '+slot+'<br>📅 '+qrDate;
+  document.getElementById('qr-url-box').textContent=qrURL;
+  document.getElementById('qr-modal').classList.add('open');
+}
+</script>
+</body>
+</html>

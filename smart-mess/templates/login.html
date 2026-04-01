@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Mess – Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Syne:wght@800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#0a0a0f;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;padding:1rem}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 80%,rgba(255,140,0,.15) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 80% 20%,rgba(255,60,60,.1) 0%,transparent 60%);z-index:0}
+.card{position:relative;z-index:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(24px);border-radius:24px;padding:2.5rem 2rem;width:min(460px,96vw);text-align:center;animation:slideUp .5s cubic-bezier(.22,1,.36,1) both}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}}
+.logo{font-family:'Syne',sans-serif;font-size:2rem;color:#ff8c00;letter-spacing:-1px}.logo span{color:#fff}
+.hostel-badge{display:inline-block;background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.3);color:#ff8c00;padding:.3rem .9rem;border-radius:20px;font-size:.8rem;font-weight:600;margin:.5rem 0 1.5rem}
+.tab-row{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:.3rem;margin-bottom:1.5rem;gap:.3rem}
+.tab{flex:1;padding:.6rem;border-radius:9px;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:all .2s;color:rgba(255,255,255,.5);background:none}
+.tab.active{background:linear-gradient(135deg,#ff8c00,#ff4500);color:#fff}
+label{display:block;text-align:left;color:rgba(255,255,255,.55);font-size:.78rem;margin-bottom:.35rem}
+input{width:100%;padding:.82rem 1rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:11px;color:#fff;font-family:inherit;font-size:.92rem;outline:none;transition:border .2s;margin-bottom:1rem}
+input:focus{border-color:#ff8c00;background:rgba(255,140,0,.07)}
+.submit-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,#ff8c00,#ff4500);border:none;border-radius:11px;color:#fff;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,140,0,.4)}
+.error-box{background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.3);border-radius:10px;padding:.7rem 1rem;font-size:.8rem;color:#ff6b6b;margin-bottom:1rem;text-align:left}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Smart<span>Mess</span></div>
+  <div class="hostel-badge">🏠 {{ hostel }}</div>
+  <div class="tab-row">
+    <button class="tab" onclick="window.location='/register'">📝 Register</button>
+    <button class="tab active">🔑 Login</button>
+  </div>
+  {% if error %}<div class="error-box">⚠️ {{ error }}</div>{% endif %}
+  <form method="POST" action="/login">
+    <label>Registration Number</label>
+    <input name="reg" placeholder="Eg: RA2311026010526" required autocomplete="off" style="text-transform:uppercase">
+    <label>College Email ID</label>
+    <input name="email" type="email" placeholder="Eg: surya@srmist.edu.in" required autocomplete="off">
+    <button type="submit" class="submit-btn">Enter Mess Portal →</button>
+  </form>
+</div>
+</body>
+</html>

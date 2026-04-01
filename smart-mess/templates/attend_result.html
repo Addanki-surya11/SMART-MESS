@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Mess – Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#0a0a0f;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;padding:1.5rem}
+.wrap{width:min(420px,96vw)}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:2.2rem 1.8rem;text-align:center}
+.icon{font-size:4.5rem;margin-bottom:.8rem;display:block;line-height:1}
+.status-title{font-family:'Syne',sans-serif;font-size:1.7rem;margin-bottom:.45rem}
+.status-msg{font-size:.84rem;margin-bottom:1.6rem}
+.ok .card{border-color:rgba(0,230,118,.4);background:rgba(0,230,118,.05)}
+.ok .status-title{color:#00e676}.ok .status-msg{color:rgba(0,230,118,.75)}
+.dup .card{border-color:rgba(255,140,0,.4);background:rgba(255,140,0,.05)}
+.dup .status-title{color:#ff8c00}.dup .status-msg{color:rgba(255,140,0,.75)}
+.exp .card{border-color:rgba(255,60,60,.4);background:rgba(255,60,60,.05)}
+.exp .status-title{color:#ff6b6b}.exp .status-msg{color:rgba(255,60,60,.75)}
+.hostel-tag{display:inline-block;background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.3);color:#ff8c00;padding:.28rem .85rem;border-radius:20px;font-size:.76rem;font-weight:600;margin-bottom:1.4rem}
+.s-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:1.1rem;text-align:left;margin-bottom:1.4rem}
+.s-row{display:flex;align-items:flex-start;padding:.32rem 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.86rem}
+.s-row:last-child{border:none}
+.s-label{color:rgba(255,255,255,.42);font-size:.72rem;min-width:62px;padding-top:.1rem}
+.s-value{font-weight:700;color:#f0f0f0;flex:1;word-break:break-all}
+.s-value.name{color:#ff8c00;font-size:1.05rem}.s-value.slot{color:#29b6f6}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin-bottom:1.1rem}
+.prog-fill{height:100%;background:#ff8c00;border-radius:2px;animation:shrink 5s linear forwards}
+@keyframes shrink{from{width:100%}to{width:0%}}
+.close-btn{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#f0f0f0;padding:.65rem 2rem;border-radius:11px;text-decoration:none;font-weight:600;font-size:.86rem;cursor:pointer}
+.close-btn:hover{background:rgba(255,255,255,.14)}
+</style>
+</head>
+<body class="{% if status=='ok' %}ok{% elif status=='duplicate' %}dup{% else %}exp{% endif %}">
+<div class="wrap"><div class="card">
+  <div class="hostel-tag">🏠 {{ hostel }}</div>
+  {% if status == 'ok' %}
+    <span class="icon">✅</span>
+    <div class="status-title">Entry Allowed!</div>
+    <div class="status-msg">Attendance marked successfully</div>
+    <div class="s-card">
+      <div class="s-row"><span class="s-label">👤 Name</span><span class="s-value name">{{ student.name }}</span></div>
+      <div class="s-row"><span class="s-label">🆔 Reg No</span><span class="s-value">{{ student.reg }}</span></div>
+      <div class="s-row"><span class="s-label">📧 Email</span><span class="s-value" style="font-size:.8rem">{{ student.email }}</span></div>
+      <div class="s-row"><span class="s-label">🍽 Meal</span><span class="s-value">{{ student.meal|capitalize }}</span></div>
+      <div class="s-row"><span class="s-label">🕐 Slot</span><span class="s-value slot">{{ student.slot }}</span></div>
+      <div class="s-row"><span class="s-label">⏱ Time</span><span class="s-value">{{ student.time }}</span></div>
+    </div>
+  {% elif status == 'duplicate' %}
+    <span class="icon">⚠️</span>
+    <div class="status-title">Already Entered!</div>
+    <div class="status-msg">Attendance already marked</div>
+    <div class="prog-bar"><div class="prog-fill"></div></div>
+    <div class="s-card">
+      <div class="s-row"><span class="s-label">👤 Name</span><span class="s-value name">{{ student.name }}</span></div>
+      <div class="s-row"><span class="s-label">🆔 Reg No</span><span class="s-value">{{ student.reg }}</span></div>
+      <div class="s-row"><span class="s-label">📧 Email</span><span class="s-value" style="font-size:.8rem">{{ student.email }}</span></div>
+      <div class="s-row"><span class="s-label">🍽 Meal</span><span class="s-value">{{ student.meal|capitalize }}</span></div>
+      <div class="s-row"><span class="s-label">🕐 Slot</span><span class="s-value slot">{{ student.slot }}</span></div>
+    </div>
+  {% else %}
+    <span class="icon">❌</span>
+    <div class="status-title">QR Expired!</div>
+    <div class="status-msg">{{ message }}</div>
+  {% endif %}
+  <a href="javascript:void(0)" class="close-btn" onclick="try{window.close();}catch(e){history.back();}">✕ Close</a>
+</div></div>
+{% if status=='duplicate' %}<script>setTimeout(()=>{try{window.close();}catch(e){history.back();}},5000);</script>{% endif %}
+</body>
+</html>
