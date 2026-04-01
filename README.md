@@ -80,8 +80,6 @@ This project incorporates several key programming and system design concepts:
 4. Push to branch: `git push origin feature-name`
 5. Open a pull request.
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
 For questions, contact the maintainer at suryaaddanki877@gmail.com.
